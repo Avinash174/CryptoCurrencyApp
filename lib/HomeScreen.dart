@@ -1,3 +1,4 @@
+import 'package:cryto_currency_app/update_profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: Drawer(
         child: Column(
           children: [
-            UserAccountsDrawerHeader(
+            const UserAccountsDrawerHeader(
               accountName: Text(
                 "Name",
                 style: TextStyle(
@@ -37,12 +38,15 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             ListTile(
-              onTap: (){
-
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (_)=>UpdateProfileScreen()));
               },
               leading: Icon(Icons.account_box),
-              title: Text(
-                  "Update Profile",
+              title: const Text(
+                "Update Profile",
+                style: TextStyle(
+                  fontSize: 17,
+                ),
               ),
             ),
           ],
