@@ -11,7 +11,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String name = "", age = " ", email = "";
-  bool isDarMode = false;
+  bool isDarkMode = false;
 
   void initState() {
     super.initState();
@@ -30,13 +30,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: isDarMode?Colors.black:Colors.white,
+      backgroundColor: isDarkMode ? Colors.black : Colors.white,
       appBar: AppBar(
         title: Text("Crpto Currency App"),
         centerTitle: true,
       ),
       drawer: Drawer(
-        backgroundColor: isDarMode?Colors.black:Colors.white,
+        backgroundColor: isDarkMode ? Colors.black : Colors.white,
         child: Column(
           children: [
             UserAccountsDrawerHeader(
@@ -53,8 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               currentAccountPicture: Icon(
                 Icons.account_circle,
+                color: isDarkMode ? Colors.white : Colors.black,
                 size: 70,
-                color: Colors.white,
               ),
             ),
             ListTile(
@@ -62,24 +62,37 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (_) => UpdateProfileScreen()));
               },
-              leading: Icon(Icons.account_box),
-              title: const Text(
+              leading: Icon(
+                Icons.account_box,
+                color: isDarkMode ? Colors.white : Colors.black,
+              ),
+              title: Text(
                 "Update Profile",
                 style: TextStyle(
+                  color: isDarkMode ? Colors.white : Colors.black,
                   fontSize: 17,
                 ),
               ),
             ),
             ListTile(
-              onTap: () {
-               setState(() {
-                 isDarMode = !isDarMode;
-               });
+              onTap: () async{
+                SharedPreferences prefs=await SharedPreferences.getInstance();
+
+                setState(() {
+                  isDarkMode = !isDarkMode;
+                });
+                await prefs.setBool('isDarkMode', isDarkMode);
               },
-              leading: Icon(isDarMode?Icons.light_mode:Icons.dark_mode),
+              leading: Icon(
+                isDarkMode ? Icons.light_mode : Icons.dark_mode,
+                color: isDarkMode ? Colors.white : Colors.black,
+              ),
               title: Text(
-                isDarMode?"Light Mode":"Dark Mode",
-                style: TextStyle(fontSize: 17),
+                isDarkMode ? "Light Mode" : "Dark Mode",
+                style: TextStyle(
+                  color: isDarkMode ? Colors.white : Colors.black,
+                  fontSize: 17,
+                ),
               ),
             )
           ],
