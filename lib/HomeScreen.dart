@@ -1,3 +1,4 @@
+import 'package:cryto_currency_app/app_theme.dart';
 import 'package:cryto_currency_app/update_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,7 +12,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String name = "", age = " ", email = "";
-  bool isDarkMode = false;
+  bool isDarkMode = AppTheme.isDarkModenabled;
 
   void initState() {
     super.initState();
@@ -32,7 +33,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: isDarkMode ? Colors.black : Colors.white,
       appBar: AppBar(
-        title: Text("Crpto Currency App"),
+        leading: (IconButton(onPressed: (){},icon: Icon(Icons.menu,color: Colors.black,),)),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text("Crpto Currency App",style: TextStyle(color: Colors.black),),
         centerTitle: true,
       ),
       drawer: Drawer(
@@ -81,6 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 setState(() {
                   isDarkMode = !isDarkMode;
                 });
+                AppTheme.isDarkModenabled=isDarkMode;
                 await prefs.setBool('isDarkMode', isDarkMode);
               },
               leading: Icon(

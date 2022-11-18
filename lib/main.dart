@@ -1,7 +1,10 @@
 import 'package:cryto_currency_app/HomeScreen.dart';
+import 'package:cryto_currency_app/app_theme.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+ await  AppTheme.getThemeValue();
   runApp(const MyApp());
 }
 
