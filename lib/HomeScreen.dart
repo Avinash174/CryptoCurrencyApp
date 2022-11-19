@@ -19,11 +19,12 @@ class _HomeScreenState extends State<HomeScreen> {
   String name = "", age = " ", email = "";
   bool isDarkMode = AppTheme.isDarkModenabled;
   GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
-
+  List<CoinDetailsModel> coinDetailsList=[];
+  late Future <List<CoinDetailsModel>> coinDetailsFuture;
   void initState() {
     super.initState();
     getUserDetails();
-    getCoinDetails();
+    coinDetailsFuture=getCoinDetails();
   }
 
   void getUserDetails() async {
@@ -137,43 +138,51 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: SizedBox(
-        width: double.infinity,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              child: TextField(
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(40),
+      body: FutureBuilder(
+          future: coinDetailsFuture,
+          builder: (context,
+              AsyncSnapshot<List<CoinDetailsModel>> snapshot) {
+            if (snapshot.hasData) {
+              if(coinDetailsList.isEmpty){
+                coinDetailsList=snapshot.data!;
+              }
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                    child: TextField(
+                      onChanged: (query){
+                       List<CoinDetailsModel> searchResult=snapshot.data!.where((element){
+                         String coinName= element.name;
+                         bool isItemFound=coinName.contains(query);
+                         return isItemFound;
+                       }).toList();
+                       setState(() {
+                         coinDetailsList=searchResult;
+                       });
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(40),
+                        ),
+                        hintText: "Search For Coin",
+                      ),
+                    ),
                   ),
-                  hintText: "Search For Coin",
-                ),
-              ),
-            ),
-            Expanded(
-              child: FutureBuilder(
-                  future: getCoinDetails(),
-                  builder: (context,
-                      AsyncSnapshot<List<CoinDetailsModel>> snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            return coinDetails(snapshot.data![index]);
-                          });
-                    } else {
-                      return Center(
-                        child: Text("Error Occured"),
-                      );
-                    }
-                  }),
-            ),
-          ],
-        ),
-      ),
+                  Expanded(child: ListView.builder(
+                      itemCount: coinDetailsList.length,
+                      itemBuilder: (context, index) {
+                        return coinDetails(coinDetailsList[index]);
+                      }),),
+                ],
+              );
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          }),
     );
   }
 
@@ -187,14 +196,17 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       title: Text(
+
         "${model.name}\n${model.symbol}",
         style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
       ),
       trailing: RichText(
         textAlign: TextAlign.end,
         text: TextSpan(
-          text: "RS.${model.currentPrice}",
+
+          text: "RS.${model.currentPrice}\n",
           style: TextStyle(
+
             fontSize: 17,
             fontWeight: FontWeight.w500,
             color: Colors.black,
