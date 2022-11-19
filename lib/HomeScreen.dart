@@ -179,17 +179,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget coinDetails(CoinDetailsModel model) {
     return ListTile(
-      leading: Image.network(
-        model.image,
+      leading: SizedBox(
+        height: 50,
+        width: 50,
+        child: Image.network(
+          model.image,
+        ),
       ),
       title: Text(
-        "BitCoin",
+        "${model.name}\n${model.symbol}",
         style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
       ),
       trailing: RichText(
         textAlign: TextAlign.end,
         text: TextSpan(
-          text: "15244.98\n",
+          text: "RS.${model.currentPrice}",
           style: TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w500,
@@ -197,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           children: [
             TextSpan(
-              text: "3.02%",
+              text: "${model.priceChangePercentage24h}%",
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 17,
@@ -206,7 +210,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-
       ),
     );
   }
