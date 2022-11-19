@@ -19,12 +19,13 @@ class _HomeScreenState extends State<HomeScreen> {
   String name = "", age = " ", email = "";
   bool isDarkMode = AppTheme.isDarkModenabled;
   GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
-  List<CoinDetailsModel> coinDetailsList=[];
-  late Future <List<CoinDetailsModel>> coinDetailsFuture;
+  bool isFirstTimeDataAcces = true;
+  List<CoinDetailsModel> coinDetailsList = [];
+  late Future<List<CoinDetailsModel>> coinDetailsFuture;
   void initState() {
     super.initState();
     getUserDetails();
-    coinDetailsFuture=getCoinDetails();
+    coinDetailsFuture = getCoinDetails();
   }
 
   void getUserDetails() async {
@@ -140,26 +141,28 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: FutureBuilder(
           future: coinDetailsFuture,
-          builder: (context,
-              AsyncSnapshot<List<CoinDetailsModel>> snapshot) {
+          builder: (context, AsyncSnapshot<List<CoinDetailsModel>> snapshot) {
             if (snapshot.hasData) {
-              if(coinDetailsList.isEmpty){
-                coinDetailsList=snapshot.data!;
+              if (isFirstTimeDataAcces) {
+                coinDetailsList = snapshot.data!;
+                isFirstTimeDataAcces = false;
               }
               return Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
                     child: TextField(
-                      onChanged: (query){
-                       List<CoinDetailsModel> searchResult=snapshot.data!.where((element){
-                         String coinName= element.name;
-                         bool isItemFound=coinName.contains(query);
-                         return isItemFound;
-                       }).toList();
-                       setState(() {
-                         coinDetailsList=searchResult;
-                       });
+                      onChanged: (query) {
+                        List<CoinDetailsModel> searchResult =
+                            snapshot.data!.where((element) {
+                          String coinName = element.name;
+                          bool isItemFound = coinName.contains(query);
+                          return isItemFound;
+                        }).toList();
+                        setState(() {
+                          coinDetailsList = searchResult;
+                        });
                       },
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.search),
@@ -170,11 +173,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  Expanded(child: ListView.builder(
-                      itemCount: coinDetailsList.length,
-                      itemBuilder: (context, index) {
-                        return coinDetails(coinDetailsList[index]);
-                      }),),
+                  Expanded(
+                    child: coinDetailsList.isEmpty
+                        ? Center(
+                            child: Text("No Coin Found"),
+                          )
+                        : ListView.builder(
+                            itemCount: coinDetailsList.length,
+                            itemBuilder: (context, index) {
+                              return coinDetails(coinDetailsList[index]);
+                            }),
+                  ),
                 ],
               );
             } else {
@@ -196,17 +205,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       title: Text(
-
         "${model.name}\n${model.symbol}",
         style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
       ),
       trailing: RichText(
         textAlign: TextAlign.end,
         text: TextSpan(
-
           text: "RS.${model.currentPrice}\n",
           style: TextStyle(
-
             fontSize: 17,
             fontWeight: FontWeight.w500,
             color: Colors.black,
