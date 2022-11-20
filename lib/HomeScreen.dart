@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:cryto_currency_app/app_theme.dart';
+import 'package:cryto_currency_app/coin_graph_screen.dart';
 import 'package:cryto_currency_app/update_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -196,7 +197,17 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget coinDetails(CoinDetailsModel model) {
+
     return ListTile(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+               CoinScreenGraph(coinId: model.id, coiName: model.name)
+          ),
+        );
+      },
       leading: SizedBox(
         height: 50,
         width: 50,
