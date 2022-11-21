@@ -59,20 +59,21 @@ class _HomeScreenState extends State<HomeScreen> {
       key: _globalKey,
       backgroundColor: isDarkMode ? Colors.black : Colors.white,
       appBar: AppBar(
+
         leading: (IconButton(
           onPressed: () {
             _globalKey.currentState!.openDrawer();
           },
           icon: Icon(
             Icons.menu,
-            color: Colors.black,
+              color: isDarkMode?Colors.black:Colors.white,
           ),
         )),
-        backgroundColor: Colors.white,
+        backgroundColor: isDarkMode?Colors.white:Colors.black,
         elevation: 0,
         title: Text(
           "Crpto Currency App",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle( color: isDarkMode?Colors.black:Colors.white,),
         ),
         centerTitle: true,
       ),
@@ -166,11 +167,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         });
                       },
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.search),
-                        border: OutlineInputBorder(
+                        prefixIcon: Icon(Icons.search,color: isDarkMode?Colors.white:Colors.grey,),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: isDarkMode?Colors.white:Colors.grey,
+                          ),
                           borderRadius: BorderRadius.circular(40),
                         ),
                         hintText: "Search For Coin",
+                        hintStyle: (TextStyle(color:isDarkMode?Colors.white:Colors.grey, )),
                       ),
                     ),
                   ),
@@ -204,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
           context,
           MaterialPageRoute(
             builder: (context) =>
-               CoinScreenGraph(coinId: model.id, coiName: model.name)
+               CoinScreenGraph(coinDetailsModel: model)
           ),
         );
       },
@@ -217,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       title: Text(
         "${model.name}\n${model.symbol}",
-        style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+        style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500,color: isDarkMode?Colors.white:Colors.black,),
       ),
       trailing: RichText(
         textAlign: TextAlign.end,
@@ -226,7 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w500,
-            color: Colors.black,
+              color: isDarkMode?Colors.white:Colors.black
           ),
           children: [
             TextSpan(
