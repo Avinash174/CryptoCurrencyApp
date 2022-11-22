@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cryto_currency_app/HomeScreen.dart';
 import 'package:cryto_currency_app/app_theme.dart';
 import 'package:cryto_currency_app/coin_details_model.dart';
