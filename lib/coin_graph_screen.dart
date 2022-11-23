@@ -142,7 +142,7 @@ class _CoinScreenGraphState extends State<CoinScreenGraph> {
                       LineChartData(
                         minX: minX,
                         minY: minY,
-                        maxX: maxY,
+                        maxX: maxX,
                         maxY: maxY,
                         borderData: FlBorderData(
                           show: false,
