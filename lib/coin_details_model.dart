@@ -23,6 +23,4 @@ class CoinDetailsModel {
     currentPrice = json['current_price'].toDouble();
     priceChangePercentage24h = json['price_change_percentage_24h'];
   }
-
-
 }
